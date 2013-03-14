@@ -211,6 +211,24 @@ def problem_23():
     result = sum(n for n in range(1,maxnum) if n not in sums)
     print (result)
 
+def problem_24():
+    #print(math.factorial(10))
+    num = 1000000 - 1
+    s= []
+    a = list(range(10))
+    for i in range(10):
+        f= math.factorial(9-i)
+        m = num // f
+        order = a[m]
+        a.remove(order)
+        s.append(order)
+        num %= f
+    print(s)
+    v = 0
+    for i in range(len(s)):
+        v = v*10 + s[i]
+    print(v)
+
 def problem_67():
     data = []
     dict = {}
@@ -245,4 +263,5 @@ if __name__ == "__main__":
     #problem_19()
     #problem_22()
     #problem_23()
+    problem_24()
     #problem_67()
