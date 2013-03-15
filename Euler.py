@@ -207,8 +207,9 @@ def problem_23():
     maxnum = 28124
     #s = set(filter(lambda x:sum(divisors(x)) > x, range(2,28124)))
     s=[n for n in range(1,maxnum) if sum(divisors(n)) > n ]
-    sums=set(a+b for a in s for b in s if a+b<=maxnum)
+    sums=set(a+b for a in s for b in s if a<=b and a+b<=maxnum)
     result = sum(n for n in range(1,maxnum) if n not in sums)
+    #result = sum(set(range(1,maxnum)) - set(sums))
     print (result)
 
 def problem_24():
@@ -228,6 +229,95 @@ def problem_24():
     for i in range(len(s)):
         v = v*10 + s[i]
     print(v)
+
+def problem_25():
+    a,b,c = 1,1,2
+    term = 3
+    while(c < 10**999):
+        a = b
+        b = c
+        c = a + b
+        term += 1
+    print (term)
+
+def problem_26():
+    def cycle(n):
+        multis=[]
+        numerator = 1
+        numerators=[]
+        while (numerator not in numerators):
+            numerators.append(numerator)
+            numerator *= 10
+            while (numerator<n):
+                multis.append(0)
+                numerator *= 10
+            m = numerator // n
+            multis.append(m)
+            numerator =  numerator % n
+            if numerator==0:
+                return []
+        index = numerators.index(numerator)
+        return multis[index:]
+
+    #maxlen = 0
+    #d = 1 
+    #for i in range(2,1000):
+    #    l = len(cycle(i))
+    #    if (maxlen < l):
+    #        maxlen = l
+    #        d = i
+    d = max([(len(cycle(x)), x) for x in range(1,1000)])[1]
+    print(d)
+
+def problem_30():
+    def maxbits():
+        n = 1
+        while(10**n < 9**4*n):
+            n += 1
+        return n
+
+
+    k = maxbits()
+    l = 10**k
+    print(k)
+    n = 2
+    while(n < l):
+        s = [int(x) for x in str(n)]
+        sums = sum([x**4 for x in s])
+        if (n==sums):
+            print(n)
+        n += 1
+
+def problem_35():
+    def prime(n):
+        if (n==2):
+            return True
+        if (n<2 or n%2 == 0):
+            return False
+        l = math.ceil(n**0.5) + 1
+        i = 3
+        while(i < l):
+            if (n % i==0):
+                return False
+            i += 2
+        return True
+
+    def circularPrime(n):
+        if not prime(n):
+            return False
+        ss = [int(x) for x in str(n)]
+        for i in range(len(ss)):
+            ss.append(ss.pop(0))
+            m = 0
+            for num in ss:
+                m = m*10 + num
+            if not prime(m):
+                return False
+        return True
+
+    limit = 1000000
+    s=list(filter(lambda x:circularPrime(x), range(2,limit)))
+    print(len(s))
 
 def problem_67():
     data = []
@@ -263,5 +353,9 @@ if __name__ == "__main__":
     #problem_19()
     #problem_22()
     #problem_23()
-    problem_24()
+    #problem_24()
+    #problem_25()
+    #problem_26()
+    problem_30()
+    #problem_35()
     #problem_67()
