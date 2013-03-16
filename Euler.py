@@ -1,3 +1,4 @@
+#!/usr/local/bin/python3
 import math
 
 def problem_13():
@@ -259,34 +260,50 @@ def problem_26():
         index = numerators.index(numerator)
         return multis[index:]
 
-    #maxlen = 0
-    #d = 1 
-    #for i in range(2,1000):
-    #    l = len(cycle(i))
-    #    if (maxlen < l):
-    #        maxlen = l
-    #        d = i
     d = max([(len(cycle(x)), x) for x in range(1,1000)])[1]
     print(d)
+
+def problem_27():
+    def prime(n):
+        if (n<2):
+            return False
+        return all(n % i != 0 for i in range(2, int(n**0.5)+1))
+    
+    def quadratic(a,b):
+        n = 0
+        while(True):
+            m = n**2 + a*n + b
+            if not prime(m):
+                return n
+            n += 1
+    
+    maxv=max([(quadratic(a,b),a,b) for a in range(-999,1000) for b in range(-999,1000)])
+    print(maxv)
+    print(maxv[1]*maxv[2])
+
+def problem_28():
+    def diagonal(m):
+        s = 1
+        for n in range(1, m, 2):
+            s += 4*n*n+ 10*n + 10
+        return s
+        
+    print(diagonal(1001))
 
 def problem_30():
     def maxbits():
         n = 1
-        while(10**n < 9**4*n):
+        while(10**n < 9**5*n):
             n += 1
         return n
 
+    def fifthEqual(n):
+        return sum([int(x)**5 for x in str(n)]) == n
 
     k = maxbits()
-    l = 10**k
-    print(k)
-    n = 2
-    while(n < l):
-        s = [int(x) for x in str(n)]
-        sums = sum([x**4 for x in s])
-        if (n==sums):
-            print(n)
-        n += 1
+    nums= [n for n in range(2,10**k) if fifthEqual(n)]
+    #nums = filter(lambda x: fifthEqual(x), range(2,10**k))
+    print(sum(nums))
 
 def problem_35():
     def prime(n):
@@ -356,6 +373,8 @@ if __name__ == "__main__":
     #problem_24()
     #problem_25()
     #problem_26()
-    problem_30()
+    #problem_27()
+    problem_28()
+    #problem_30()
     #problem_35()
     #problem_67()
