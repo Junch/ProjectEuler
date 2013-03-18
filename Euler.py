@@ -1,5 +1,6 @@
 #!/usr/local/bin/python3
 import math
+import time
 
 def problem_13():
     data = []
@@ -290,6 +291,10 @@ def problem_28():
         
     print(diagonal(1001))
 
+def problem_29():
+    n = len(set(a**b for a in range(2,101) for b in range(2,101)))
+    print(n)
+
 def problem_30():
     def maxbits():
         n = 1
@@ -304,6 +309,104 @@ def problem_30():
     nums= [n for n in range(2,10**k) if fifthEqual(n)]
     #nums = filter(lambda x: fifthEqual(x), range(2,10**k))
     print(sum(nums))
+
+def problem_31(): #Coin sums
+    """
+    In England the currency is made up of pound, ?, and pence, p, and there are eight coins in general circulation:
+    1p, 2p, 5p, 10p, 20p, 50p, ?1 (100p) and ?2 (200p).
+    It is possible to make ?2 in the following way:
+    1?1 + 150p + 220p + 15p + 12p + 31p
+    How many different ways can ?2 be made using any number of coins?
+    """
+    num = 200
+    s=0
+    for g in range(num//100 + 1):
+        for f in range(num//50 + 1):
+            gf = 100*g+50*f
+            if (gf > num): break
+            for e in range(num//20 + 1):
+                gfe = 20*e + gf
+                if (gfe > num): break
+                for d in range(num//10 + 1):
+                    gfed = 10*d+gfe
+                    if (gfed > num): break
+                    for c in range(num//5 +1):
+                        gfedc = 5*c + gfed
+                        if (gfedc > num): break
+                        for b in range(num//2 + 1):
+                            gfedcb = 2*b + gfedc
+                            if (gfedcb > num): break
+                            for a in range(num + 1):                       
+                                if (a+gfedcb==num):
+                                    s += 1
+                                    break
+    print (s+1)
+
+def problem_31_2(): #Coin sums
+    coins = [200,100,50,20,10,5,2,1]
+    def findposs(money, maxcoin):
+        sum = 0
+        if (maxcoin == 7): return 1
+        for i in range(maxcoin, 8):
+            left = money - coins[i]
+            if (left == 0): sum+=1
+            if (left > 0): sum += findposs(left,i)
+        return sum
+    print(findposs(200,0))
+
+def problem_31_3(): #Coin sums
+    #http://www.algorithmist.com/index.php/Coin_Change
+    #http://blog.dreamshire.com/2009/03/31/project-euler-problem-31-solution/
+    #http://users.softlab.ece.ntua.gr/~ttsiod/euler31.html
+    c = [1, 2, 5, 10, 20, 50, 100, 200]
+    d = {x: [1] + [0] * 7 for x in range(1, 201)}
+    for i in range(1, 201):
+        for j in range(1, 8):
+            if i == c[j]: d[i][j] = d[i][j-1] + 1
+            elif i < c[j]: d[i][j] = d[i][j-1]
+            else: d[i][j] = d[i][j-1] + d[i-c[j]][j]
+    print(d[200][-1])
+
+def problem_32():
+    def sum2x3():
+        s={1,2,3,4,5,6,7,8,9}
+        m2={(x,y) for x in s for y in s if x != y}
+        result = set()
+        for x, y in m2:
+            t = s - {x,y}
+            m3={(a,b,c) for a in t for b in t for c in t if a != b and a != c and b!=c}
+            for a,b,c in m3:
+                u = t - {a,b,c}
+                num = (10*x+y)*(100*a+10*b+c)
+                v = [int(n) for n in str(num)]
+                if (len(u) == len(v) and u == set(v)):
+                    result.add(num)
+                    print((10*x+y, 100*a+10*b+c, num))
+        return sum(result)
+    def sum1x4():
+        s={1,2,3,4,5,6,7,8,9}
+        result = set()
+        for x in s:
+            t = s - {x}
+            m4={(a,b,c,d) for a in t for b in t for c in t  for d in t if a != b and a != c and b!=c and a!=d and b!=d and c!=d}
+            for a,b,c,d in m4:
+                u = t - {a,b,c,d}
+                num = x*(1000*a + 100*b+10*c+d)
+                v = [int(n) for n in str(num)]
+                if (len(u) == len(v) and u == set(v)):
+                    result.add(num)
+                    print((x, 1000*a + 100*b+10*c+d, num))
+        return sum(result)
+    print(sum2x3()+sum1x4())
+
+def problem_32_2():
+    # The result is 4 bit, so it is 9876 at most in this case
+    s = set()
+    for x in range(1, 100):
+        for y in range(100, 10000):
+            if ''.join(sorted(str(x*y)+str(x)+str(y))) == '123456789':
+                s.add(x*y)
+    print(sum(s))
 
 def problem_35():
     def prime(n):
@@ -362,6 +465,7 @@ def problem_67():
     print(maxvalue)
 
 if __name__ == "__main__":
+    starttime = time.clock()
     #problem_13()
     #problem_15()
     #problem_16()
@@ -374,7 +478,15 @@ if __name__ == "__main__":
     #problem_25()
     #problem_26()
     #problem_27()
-    problem_28()
+    #problem_28()
+    #problem_29()
     #problem_30()
+    #problem_31()
+    #problem_31_2()
+    #problem_31_3()
+    #problem_32()
+    problem_32_2()
     #problem_35()
     #problem_67()
+    endtime = time.clock()
+    print("It takes %f" % (endtime-starttime))
