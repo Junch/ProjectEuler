@@ -408,6 +408,57 @@ def problem_32_2():
                 s.add(x*y)
     print(sum(s))
 
+def problem_33():
+    def bigDivider(m,n):
+        k = m%n
+        while(k!=0):
+            m = n
+            n = k
+            k = m%n
+        return n
+
+    s = [(x,y) for x in range(1,10) for y in range(0,10)]
+    t= []
+    for x,y in s:
+        for a,b in s:
+            n = 10*x+y
+            d = 10*a+b
+            if (d <= n):  continue
+            if (y == a and d*x==n*b):
+                t.append((n,d))
+            elif (x == b and d*y==n*a):
+                t.append((n,d))
+
+    nn,dd = 1,1
+    for n,d in t:
+        nn *= n
+        dd *= d
+    divider = bigDivider(nn,dd)
+    print((nn,dd,divider))
+    print(dd//divider)
+
+def problem_34():
+    def getN():
+        n=1
+        while(True):
+            if (10**(n-1) > n*math.factorial(9)):
+                return n
+            n=n+1
+
+    def digitFactorial(n):
+        m = n
+        sums = 0
+        while(m != 0):
+            k = m%10
+            sums += math.factorial(k)
+            m = m//10
+        return sums == n
+
+    maxdigits = getN()-1
+    print(maxdigits)
+    s=[n for n in range(10,maxdigits*math.factorial(9)) if digitFactorial(n)]
+    print(sum(s))
+
 def problem_35():
     def prime(n):
         if (n==2):
@@ -485,7 +536,9 @@ if __name__ == "__main__":
     #problem_31_2()
     #problem_31_3()
     #problem_32()
-    problem_32_2()
+    #problem_32_2()
+    #problem_33()
+    problem_34()
     #problem_35()
     #problem_67()
     endtime = time.clock()
