@@ -490,6 +490,43 @@ def problem_35():
     s=list(filter(lambda x:circularPrime(x), range(2,limit)))
     print(len(s))
 
+def problem_36():
+    def palindrome(n):
+        digits = str(n)
+        for i in range(len(digits)//2):
+            if digits[i] != digits[-i-1]:
+                return False
+        digits = bin(n)[2:]
+        for i in range(len(digits)//2):
+            if digits[i] != digits[-i-1]:
+                return False
+        return True
+    print(sum(n for n in range(10**6) if palindrome(n)))
+
+def problem_36_2():
+    print(sum([i for i in range(1,1000000) if str(i)==str(i)[::-1] if bin(i)[2:]==bin(i)[2:][::-1]]))
+
+def problem_37():
+    def prime(n):
+        if (n<2):
+            return False
+        return all(n%x != 0 for x in range(2, int(n**0.5)+1))
+
+    s=[]
+    i = 10
+    while(len(s) < 11):
+        i += 1
+        if not prime(i):
+            continue
+
+        left = [int(str(i)[j:]) for j in range(1, len(str(i)))]
+        right = [int(str(i)[:j]) for j in range(1, len(str(i)))]
+        if( all(prime(n) for n in left) and all(prime(n) for n in right)):
+            s.append(i)
+    
+    print(s)
+    print(sum(s))
+
 def problem_67():
     data = []
     dict = {}
@@ -538,8 +575,11 @@ if __name__ == "__main__":
     #problem_32()
     #problem_32_2()
     #problem_33()
-    problem_34()
+    #problem_34()
     #problem_35()
+    #problem_36()
+    #problem_36_2()
+    problem_37()
     #problem_67()
     endtime = time.clock()
     print("It takes %f" % (endtime-starttime))
