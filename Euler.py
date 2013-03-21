@@ -1,6 +1,9 @@
 #!/usr/local/bin/python3
 import math
 import time
+import functools
+import operator
+from itertools import permutations
 
 def problem_13():
     data = []
@@ -519,13 +522,172 @@ def problem_37():
         if not prime(i):
             continue
 
-        left = [int(str(i)[j:]) for j in range(1, len(str(i)))]
-        right = [int(str(i)[:j]) for j in range(1, len(str(i)))]
-        if( all(prime(n) for n in left) and all(prime(n) for n in right)):
+        if( all(prime(n) for n in [int(str(i)[j:]) for j in range(1, len(str(i)))]) and \
+            all(prime(n) for n in [int(str(i)[:j]) for j in range(1, len(str(i)))])):
             s.append(i)
     
     print(s)
     print(sum(s))
+
+def problem_38():
+    def panMultiples3():
+        for i in permutations('987654321'):
+            n1 = int(''.join(i[0:4]))
+            n2 = int(''.join(i[4:9]))
+            if (n1*2 == n2):
+                return int(''.join(i))
+
+    def panMultiples2():
+        for i in permutations('987654321'):
+            n1 = int(''.join(i[0]))
+            n2 = int(''.join(i[1:3]))
+            n3 = int(''.join(i[3:5]))
+            n4 = int(''.join(i[5:7]))
+            n5 = int(''.join(i[7:9]))
+            if (n1*2 == n2 and n1*3==n3 and n1*4==n4 and n1*5==n5):
+                return int(''.join(i))
+
+    def panMultiples():
+        for i in permutations('987654321'):
+            n1 = int(''.join(i[0:3]))
+            n2 = int(''.join(i[3:6]))
+            n3 = int(''.join(i[6:9]))
+            if (n1*2 == n2 and n1*3==n3):
+                return int(''.join(i))
+    print(panMultiples3())
+
+def problem_39():
+    def rightTriangle(a,b,c):
+        if (c <= b):
+            return False
+        return a*a + b*b == c*c
+
+    def getSolution(p):
+        s = [(a,b,p-a-b) for a in range(1,p//3) for b in range(a,p) if rightTriangle(a,b,p-a-b)]
+        return len(s)
+
+    s =[(getSolution(i), i) for i in range(1,1000) if getSolution(i) != 0]
+    print( max(s))
+
+def problem_39_2():
+    s={}
+    for a in range(1,333):
+        for b in range(a,1000):
+            cc = a*a+b*b
+            c=int(cc**0.5)
+            if (c*c == cc):
+                p = a+b+c
+                if (p<1000):
+                    if (p not in s):
+                        s[p] = 1
+                    else:
+                        s[p] += 1
+    print(max(s.values()))
+
+def problem_40():
+    def digits(n): # The number of digits of the number n
+        m = 0
+        while(n != 0):
+            n = n // 10
+            m += 1
+        return m
+
+    def digit(n,i): # The i-th digit of the number n
+        for k in range(i):
+            n = n // 10
+        return n%10
+
+    def pos(po): # Get the digit from the po-th digit
+        i = 0
+        length = 0
+        while(length < po):
+            length += digits(i)
+            i += 1
+        return digit(i-1, length - po)
+
+    #val = 1
+    #for i in range(7):
+    #    po = 10**i
+    #    val *= pos(po)
+    val = functools.reduce(lambda x,y: x*y, [pos(10**i) for i in range(7)])
+    print(val)
+
+def problem_40_2():
+    d=''.join(map(str,range(1000000)))
+    print(functools.reduce(operator.mul,[int(d[10**i]) for i in range(7)]))
+
+def problem_41():
+    def prime(n):
+        if n < 2: return False
+        return all(n%x != 0 for x in range(2, int(n**0.5)+1))
+
+    def pandigital(n):
+        s=[]
+        while(n > 0):
+            m = n % 10
+            if (m == 0):
+                return False
+            s.append(m)
+            n = n // 10
+        s.sort()
+        for i in range(len(s)):
+            if(i+1 != s[i]):
+                return False
+        return True
+
+    #Note: Nine numbers cannot be done (1+2+3+4+5+6+7+8+9=45 => always dividable by 3)
+    #Note: Eight numbers cannot be done (1+2+3+4+5+6+7+8=36 => always dividable by 3)
+    i = 7654321
+    while(i > 2):
+        if pandigital(i) and prime(i):
+            print(i)
+            return
+        i -= 2
+
+def problem_41_2(): #Faster than the previous solution
+    def prime(n):
+        if n < 2: return False
+        return all(n%x != 0 for x in range(2, int(n**0.5)+1))
+
+    for i in permutations('7654321'):
+        n = int(''.join(i))
+        if prime(n):
+            print(n)
+            return
+
+def problem_42():
+    def triangle(n):
+        i = 1
+        while(True):
+            k = i*(i+1)//2
+            if(k == n):
+                return True
+            elif(k > n):
+                return False
+            i += 1
+
+    def getData(data):
+        fp = open("problem42.txt","r")
+        for line in fp:
+            buff = line.split(",")
+            data.extend([(lambda s:s.strip('"'))(x) for x in buff])
+
+    #words =[]
+    #getData(words)
+    words = eval( '[' + open( 'problem42.txt' ).readlines()[ 0 ] + ']' )
+    s = filter(lambda word: triangle(sum([ord(x) - 64 for x in word])), words)
+    print(len(list(s)))
+
+def problem_43():
+    def subDivisility():
+        s = []
+        prime =[2,3,5,7,11,13,17]
+        for i in permutations('9876543210'):
+            if (all(int(''.join(i[j+1:j+4]))%prime[j] == 0 for j in range(7))):
+                s.append(int(''.join(i)))
+        return s
+
+    print (sum(subDivisility()))
 
 def problem_67():
     data = []
@@ -579,7 +741,16 @@ if __name__ == "__main__":
     #problem_35()
     #problem_36()
     #problem_36_2()
-    problem_37()
+    #problem_37()
+    #problem_38()
+    #problem_39()
+    #problem_39_2()
+    #problem_40()
+    #problem_40_2()
+    #problem_41()
+    #problem_41_2()
+    #problem_42()
+    problem_43()
     #problem_67()
     endtime = time.clock()
     print("It takes %f" % (endtime-starttime))
