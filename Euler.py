@@ -784,46 +784,39 @@ def problem_46_2():
 
     print(conjercture())
 
-def problem_47():
-    def prime(n):
-        if (n<2):
-            return False
-        for x in range(2, int(n**0.5)+1):
-            if n%x == 0: return False
-        return True
-    
+def problem_47():  
     def factor(n):
-        s=set()
-        while(n != 0):
-            i = 2
-            while(i < n):
-                if(n%i == 0):
-                    s.add(i)
-                    n = n // i
-                    continue
-                i += 1
-            if (i==n):
-                s.add(i)
+        s=[]
+        i = 2
+        while(n > 0):
+            while(n%i == 0):
+                s.append(i)
+                n //= i
+            i += 1
+            if (i*i > n):
+                if(n>1): s.append(n)
                 break
 
-        return s
+        return set(s)
     
     i = 100
+    length = 4
     while(True):
-        if (len(factor(i)) != 4):
-            i += 1
-            continue
-        if (len(factor(i+1)) != 4):
-            i += 2
-            continue
-        if (len(factor(i+2)) != 4):
-            i += 3
-            continue
-        if (len(factor(i+3)) != 4):
-            i += 4
-            continue
-        print(i)
-        break
+        bFound = True
+        for j in range(length):
+            if (len(factor(i+j)) != length):
+                bFound=False
+                i += j+1
+                break
+        if (bFound):
+            print(i)
+            break
+
+def problem_48():
+    sums=0
+    for i in range(1, 1001):
+        sums+= i**i
+    print(str(sums)[-10:])
 
 def problem_67():
     data = []
@@ -891,7 +884,8 @@ if __name__ == "__main__":
     #problem_45()
     #problem_46()
     #problem_46_2()
-    problem_47()
+    #problem_47()
+    problem_48()
     #problem_67()
     endtime = time.clock()
     print("It takes %f" % (endtime-starttime))
