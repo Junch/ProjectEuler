@@ -313,7 +313,7 @@ def problem_30():
     #nums = filter(lambda x: fifthEqual(x), range(2,10**k))
     print(sum(nums))
 
-def problem_31(): #Coin sums
+def problem_31(): #Coin sums good problem
     """
     In England the currency is made up of pound, ?, and pence, p, and there are eight coins in general circulation:
     1p, 2p, 5p, 10p, 20p, 50p, ?1 (100p) and ?2 (200p).
@@ -688,6 +688,142 @@ def problem_43():
         return s
 
     print (sum(subDivisility()))
+    
+def problem_44(): # good problem
+    def pentagonal(p):
+        return ((((1 + 24*p) ** 0.5) + 1) / 6) % 1 == 0
+    
+    num= 10000
+    s = [i*(3*i-1)//2 for i in range(1,num)]
+    for i,a in enumerate(s):
+        for b in s[i+1:]:
+            if(pentagonal(b-a) and pentagonal(a+b)):
+                print((a,b,b-a))
+                return
+    
+def problem_45():
+#    def pentagonal(n): 
+#        k=1
+#        i=1
+#        while(k < n):
+#            k=i*(3*i-1)//2
+#            i+=1
+#        return k==n
+#    
+#    def hexagonal(n):
+#        k=1
+#        i=1
+#        while(k < n):
+#            k=i*(2*i-1)
+#            i+=1
+#        return k==n
+    
+    def isPentagonal(p):
+        return ((((1 + 24*p) ** 0.5) + 1) / 6) % 1 == 0
+ 
+    def isHexagonal(h):
+        return ((((1 + 8*h) ** 0.5) + 1) / 4) % 1 == 0
+    
+    i=286
+    while(True):
+        n=i*(i+1)//2
+        if isPentagonal(n) and isHexagonal(n):
+            print ((i,n))
+            break
+        i += 1
+
+def problem_46():
+    def prime(n):
+        if (n<2):
+            return False
+        for x in range(2, int(n**0.5)+1):
+            if n%x == 0: return False
+        return True
+    
+    def conjercture(num):
+        s=[x for x in range(1,num) if prime(x)]
+        for i in range(9, s[-1], 2):
+            for p in s:
+                if (i-p == 0): # i is a prime
+                    break
+                if (i-p < 0):
+                    return i   
+                if (((i-p)/2)**0.5 % 1 == 0):
+                    break
+        return 0
+     
+    print(conjercture(10000))
+    
+def problem_46_2():
+    def prime(n):
+        if (n<2):
+            return False
+        for x in range(2, int(n**0.5)+1):
+            if n%x == 0: return False
+        return True
+    
+    def conjercture():
+        s = []
+        i = 1
+        while(True):
+            i += 1
+            if(prime(i)):
+                s.append(i)
+                continue
+            if (i % 2 == 0):
+                continue
+
+            bFound = False
+            for p in s:
+                if (((i-p)/2)**0.5 % 1 == 0):
+                    bFound = True
+                    break
+                
+            if not bFound:
+                return i
+
+    print(conjercture())
+
+def problem_47():
+    def prime(n):
+        if (n<2):
+            return False
+        for x in range(2, int(n**0.5)+1):
+            if n%x == 0: return False
+        return True
+    
+    def factor(n):
+        s=set()
+        while(n != 0):
+            i = 2
+            while(i < n):
+                if(n%i == 0):
+                    s.add(i)
+                    n = n // i
+                    continue
+                i += 1
+            if (i==n):
+                s.add(i)
+                break
+
+        return s
+    
+    i = 100
+    while(True):
+        if (len(factor(i)) != 4):
+            i += 1
+            continue
+        if (len(factor(i+1)) != 4):
+            i += 2
+            continue
+        if (len(factor(i+2)) != 4):
+            i += 3
+            continue
+        if (len(factor(i+3)) != 4):
+            i += 4
+            continue
+        print(i)
+        break
 
 def problem_67():
     data = []
@@ -750,7 +886,12 @@ if __name__ == "__main__":
     #problem_41()
     #problem_41_2()
     #problem_42()
-    problem_43()
+    #problem_43()
+    #problem_44()
+    #problem_45()
+    #problem_46()
+    #problem_46_2()
+    problem_47()
     #problem_67()
     endtime = time.clock()
     print("It takes %f" % (endtime-starttime))
