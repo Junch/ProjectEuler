@@ -818,6 +818,44 @@ def problem_48():
         sums+= i**i
     print(str(sums)[-10:])
 
+def problem_49():
+    def prime(n):
+        if (n<2):
+            return False
+        for x in range(2, int(n**0.5)+1):
+            if n%x == 0: return False
+        return True
+
+    def sequence(s):
+        dists=[]
+        for i,a in enumerate(s):
+            for b in s[i+1:]:
+                dist = b-a
+                dists.append((b-a,a,b))
+        for i,a in enumerate(dists):
+            for b in dists[i+1:]:
+                if (a[0] == b[0] and a[2] == b[1]):
+                    print((a[1], a[2], b[2]))
+                    return True
+        return False
+
+    #print(sequence([2,5,6]))
+    #print(sequence([2,5,6,9]))
+    #print(sequence([2,5,8]))
+    #print(sequence([2,6,10,18]))
+
+    dic={}
+    s = [n for n in range(1000, 10000) if prime(n)]
+    for item in s:
+        value = ''.join(sorted(str(item)))
+        if (value in dic):
+            if (not item in dic[value]):
+                dic[value].append(item)
+            if (len(dic[value]) >= 3 and sequence(dic[value])):
+                print(dic[value])
+        else:
+            dic[value] = [item]
+
 def problem_67():
     data = []
     dict = {}
@@ -885,7 +923,8 @@ if __name__ == "__main__":
     #problem_46()
     #problem_46_2()
     #problem_47()
-    problem_48()
+    #problem_48()
+    problem_49()
     #problem_67()
     endtime = time.clock()
     print("It takes %f" % (endtime-starttime))
