@@ -856,6 +856,118 @@ def problem_49():
         else:
             dic[value] = [item]
 
+def problem_50(): #good problem
+    def prime(n):
+        if (n<2):
+            return False
+        for x in range(2, int(n**0.5)+1):
+            if n%x == 0: return False
+        return True
+
+    limit = 10**6
+    primes=[n for n in range(limit) if prime(n)]
+    length = len(primes)
+    maxlen = (0,0,0,0)
+    for i in range(length):
+        for j in range(i+1, length):
+            num = sum(primes[i:j+1])
+            if (num > limit):
+                break
+            if prime(num):
+                if (maxlen[0] < j-i+1):
+                    maxlen = (j-i+1,i,j+1,num)
+    print("maxlen=%d prime=%d"%(maxlen[0],maxlen[3]))
+    print(primes[maxlen[1]:maxlen[2]])
+
+def problem_50_2():
+    limit = 10**6
+
+    # A quick way to generate the prime list
+    bolprimelist = [True] * limit
+    primelist = []
+    for i in range(2, limit):
+        if bolprimelist[i]:
+            primelist.append(i)
+            for j in range(i*i, limit, i):
+                bolprimelist[j] = False
+
+    reslen = 0
+    result = 0
+
+    for i, j in enumerate(primelist):
+        for k, m in enumerate(primelist):
+            summe = sum(primelist[i:k])
+            length = len(primelist[i:k])
+            if summe > limit:
+                break
+            else:
+                if summe in primelist and length > reslen:
+                    reslen = length
+                    result = summe                
+        if m + result > limit:
+            break
+
+    print(result)
+
+def problem_51():
+    def prime(n):
+        if (n<2):
+            return False
+        for x in range(2, int(n**0.5)+1):
+            if n%x == 0: return False
+        return True
+
+    #The duplicated digits and the digit should be 
+    #0 or 1 or 2
+    def duplicates(n): 
+        s = [int(x) for x in str(n)]
+        return set([x for x in s if s.count(x) > 1 and x < 3])
+
+    def replace(n,i,j):#Replace the digit i with the j
+        if (i == j):
+            return n
+        s = [x for x in str(n)]
+        for k, d in enumerate(s):
+            if int(d) == i:
+                s[k] = str(j)
+        return int(''.join(s))
+
+    n = 99
+    digit = 0
+    loop = True
+    while loop:
+        n += 2
+        if not prime(n): continue
+        dups = duplicates(n)
+        for d in dups:
+            nCount = 1
+            for i in range(d+1,10):
+                m = replace(n,d,i)
+                if prime(m):
+                    nCount += 1
+            if (nCount == 8):
+                loop = False
+                digit = d
+                break
+    print(n, d)
+
+def problem_52():
+    def permuted(n):
+        return ''.join(sorted([x for x in str(n)]))
+    
+    i = 9
+    loop = True
+    while loop:
+        i += 1
+        per = permuted(i)
+        if (per != permuted(2*i)): continue
+        if (per != permuted(3*i)): continue
+        if (per != permuted(4*i)): continue
+        if (per != permuted(5*i)): continue
+        if (per != permuted(6*i)): continue
+        loop = False
+    print(i)
+
 def problem_67():
     data = []
     dict = {}
@@ -924,7 +1036,11 @@ if __name__ == "__main__":
     #problem_46_2()
     #problem_47()
     #problem_48()
-    problem_49()
+    #problem_49()
+    #problem_50()
+    #problem_50_2()
+    problem_51()
+    #problem_52()
     #problem_67()
     endtime = time.clock()
     print("It takes %f" % (endtime-starttime))
