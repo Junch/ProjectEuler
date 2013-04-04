@@ -4,6 +4,7 @@ import time
 import functools
 import operator
 from itertools import permutations
+from Euler2 import *
 
 def problem_13():
     data = []
@@ -1039,8 +1040,10 @@ if __name__ == "__main__":
     #problem_49()
     #problem_50()
     #problem_50_2()
-    problem_51()
+    #problem_51()
     #problem_52()
+    #problem_53()
+    problem_54()
     #problem_67()
     endtime = time.clock()
     print("It takes %f" % (endtime-starttime))
