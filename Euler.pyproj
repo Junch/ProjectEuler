@@ -5,7 +5,7 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>fa0c7b81-d633-4160-b4db-e233dee37dce</ProjectGuid>
     <ProjectHome>.</ProjectHome>
-    <StartupFile>Euler2.py</StartupFile>
+    <StartupFile>Euler.py</StartupFile>
     <SearchPath>
     </SearchPath>
     <WorkingDirectory>.</WorkingDirectory>

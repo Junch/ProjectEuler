@@ -111,6 +111,41 @@ def problem_54():
             count += 1
     print(count)
 
+def problem_55():
+    def palindromic(n):
+        a=[x for x in str(n)]
+        length = len(a)
+        return all(a[i]==a[length-i-1] for i in range(length//2))
+
+    def reverse(n):
+        a=[int(x) for x in str(n)]
+        m = 0
+        for i in a[::-1]:
+            m = 10*m + i
+        return m
+
+    def lychrel(n):
+        for iterations in range(50):
+            a = n + reverse(n)
+            if (palindromic(a)):
+                return False
+            else:
+                n = a
+        return True
+
+    print(len([x for x in range(1,10000) if lychrel(x)]))
+
+def problem_56():
+    maxv = 0
+    for a in range(1,101):
+        if a % 10 == 0:
+            continue
+        for b in range(1,101):
+            sums = sum([int(x) for x in str(a**b)])
+            if maxv < sums:
+                maxv = sums
+    print(maxv)
+
 if __name__ == '__main__':
     unittest.main()
 
