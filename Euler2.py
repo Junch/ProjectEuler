@@ -146,10 +146,20 @@ def problem_56():
                 maxv = sums
     print(maxv)
 
+def problem_57():
+    d = 2
+    n = 3
+    c = 0
+    for i in range(1000):
+        if len(str(d)) < len(str(n)):
+            c += 1
+        d, n = d+n, n+2*d
+    print (c)
+
 if __name__ == '__main__':
     unittest.main()
 
-class problem_57(unittest.TestCase):
+class problem_54(unittest.TestCase):
     def test_straight(self):
         hand = Hand([(2,'H'),(3,'C'), (4,'A'), (5,'S'),(6,'D')])
         self.assertTrue(hand.straight())
