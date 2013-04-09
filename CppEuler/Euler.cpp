@@ -1,12 +1,15 @@
 #include <algorithm>
 #include <iostream>
 #include <ctime>
+#include <boost/format.hpp>
 
-#pragma warning(push)
-#pragma warning(disable:4267)
-#include <boost/multiprecision/cpp_int.hpp>
-#pragma warning(pop)
-using boost::multiprecision::cpp_int;
+//#pragma warning(push)
+//#pragma warning(disable:4267)
+//#include <boost/multiprecision/cpp_int.hpp>
+//#pragma warning(pop)
+//using boost::multiprecision::cpp_int;
+
+#define cpp_int unsigned long long
 
 void problem_57()
 {
@@ -38,24 +41,22 @@ void problem_57()
     std::cout << "count=" << count << std::endl;
 }
 
-bool prime(cpp_int n)
-{
-    if (n < 2)
-        return false;
-
-    for (cpp_int i = 2; i*i < n + 1; i++)
-        if (n % i == 0)
-            return false;
-    return true;
-}
-
 void problem_58()
 {
-    double rate = 1.0;
+    auto prime=[](cpp_int n)->bool {
+        if (n < 2)
+            return false;
+
+        for (cpp_int i = 2; i*i < n + 1; i++)
+            if (n % i == 0)
+                return false;
+        return true;
+    };
+
     cpp_int n = 0;
     int nCount = 1;
     int nPrime = 0;
-    while(rate < 0.1)
+    while(true)
     {
         ++n;
         cpp_int rt = 4*n*n - 2*n + 1; // right top
@@ -70,17 +71,19 @@ void problem_58()
 
         nCount += 4;
 
-        rate = double(nPrime)/nCount;
+        double rate = double(nPrime)/nCount;
+        if (rate < 0.1f)
+            break;
     }
 
-    //TODO
+    std::cout << boost::format("side length=%1%")%(2*n+1)<< std::endl;
 }
 
 int main(int argc, char* argv)
 {
     clock_t begin = clock();
 
-    //problem_57();
+    //problem_57(); // This one must use the big integer
     problem_58();
 
     clock_t end = clock();
