@@ -1,48 +1,31 @@
 #include <algorithm>
 #include <iostream>
+#include <ctime>
 
-#define LLONG long long
-
-LLONG maxdiv(LLONG m, LLONG n)
-{
-    LLONG a = m % n;
-    while (a != 0) {
-        m = n;
-        n = a;
-        a = m % n;
-    }
-
-    return n;
-}
-
-void normal(LLONG& m, LLONG& n)
-{
-    LLONG div = maxdiv(m, n);
-    m /= div;
-    n /= div;
-}
-
-int digits(LLONG n)
-{
-    int count = 0;
-    do {
-        count++;
-        n = n/10;
-    }while(n > 0);
-
-    return count;
-}
+#pragma warning(push)
+#pragma warning(disable:4267)
+#include <boost/multiprecision/cpp_int.hpp>
+#pragma warning(pop)
+using boost::multiprecision::cpp_int;
 
 void problem_57()
 {
+    auto digits=[](cpp_int n) -> int {
+        int count = 0;
+        do {
+            count++;
+            n = n/10;
+        }while(n > 0);
+
+        return count;
+    };
+
     int count = 0;
-    LLONG n=1, d=1;
-    for (int i=0; i<1000; ++i)
-    {
-        LLONG t = n;
-        n = t + 2*d;
-        d = t + d;
-        normal(n,d);
+    cpp_int n=1, d=1;
+    for (int i=0; i<1000; ++i) {
+        cpp_int t = n + d;
+        n = t + d;
+        d = t;
         int ndigit = digits(n);
         int ddigit = digits(d);
 
@@ -50,13 +33,19 @@ void problem_57()
             ++count;
     }
 
-    std::cout << "n=" << n << " d=" << d << std::endl;
+    std::cout << "n=" << n << std::endl;
+    std::cout << "d=" << d << std::endl;
     std::cout << "count=" << count << std::endl;
 }
 
 int main(int argc, char* argv)
 {
+    clock_t begin = clock();
+
     problem_57();
 
+    clock_t end = clock();
+    double elapsed_secs = double(end-begin)/CLOCKS_PER_SEC;
+    std::cout << "elapsed time=" << elapsed_secs << std::endl;
     std::system("PAUSE");
 }
