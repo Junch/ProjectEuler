@@ -156,6 +156,80 @@ def problem_57():
         d, n = d+n, n+2*d
     print (c)
 
+def problem_60():
+    def prime(n):
+        if (n < 2):
+            return False
+        for x in range(2, int(n ** 0.5) + 1):
+            if n % x == 0: return False
+        return True
+
+    def pair(m, n):
+        a = ''.join(str(m))
+        b = ''.join(str(n))
+
+        if not prime(int(a + b)):
+            return False
+        return prime(int(b + a))
+
+    def maxpath(key, primedict):
+        result=[[key]]
+        last=[]
+        while len(result) > 0:
+            x = result.pop(0)
+            xx = x[-1]
+
+            last = list(x) #it is to copy the x
+
+            if xx not in primedict.keys():
+                continue
+
+            for y in primedict[xx]:
+                bothPrime = True
+                for i in x:
+                    maxone = max(y,i)
+                    minone = min(y,i)
+                    if minone not in primedict[maxone]:
+                        bothPrime = False
+                        break
+                if (bothPrime):
+                    z = list(x)
+                    z.append(y)
+                    result.append(z)
+
+        return last
+
+    limit = 10000
+    bolprimelist = [True] * limit
+    primelist = []
+    for i in range(2, limit):
+        if bolprimelist[i]:
+            primelist.append(i)
+            for j in range(i*i, limit, i):
+                bolprimelist[j] = False
+
+    primedict={}
+    for i, x in enumerate(primelist):
+        for y in primelist[0:i-1]:
+             if pair(x,y):
+                if x in primedict.keys():
+                    primedict[x].append(y)
+                else:
+                    primedict[x] = [y]
+    
+    minvalue = 10**6
+    value = []
+    for x in primedict.keys():
+        s = maxpath(x, primedict)
+        if (len(s) == 5):
+            sums = sum(s)
+            if (sums < minvalue):
+                minvalue = sums
+                value = list(s)
+    print(minvalue)
+    print(value)
+
+
 if __name__ == '__main__':
     unittest.main()
 
