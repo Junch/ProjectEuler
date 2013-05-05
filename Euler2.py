@@ -156,6 +156,38 @@ def problem_57():
         d, n = d+n, n+2*d
     print (c)
 
+def problem_59():
+    fp = open("problem59.txt","r")
+    data = []
+    for line in fp:
+        line = line.split(',')
+        a = [int(x) for x in line]
+        data.extend(a)
+
+    s = [x for x in range(ord('a'), ord('z')+1)]
+
+    def decrypt():
+        for i in s:
+            for j in s:
+                for k in s:
+                    result = []
+                    for m, d in enumerate(data):
+                        if m % 3 == 0:
+                            result.append(chr(i ^ d))
+                        elif m % 3 == 1:
+                            result.append(chr(j ^ d))
+                        else:
+                            result.append(chr(k ^ d))
+                    msg = ''.join(result)
+                    num = msg.count(" the ")
+                    if (num > 1):
+                        print (msg)
+                        ret = sum([ord(x) for x in msg])
+                        print (ret)
+                        return
+    decrypt()
+
+
 def problem_60():
     def prime(n):
         if (n < 2):
