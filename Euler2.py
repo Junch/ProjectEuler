@@ -260,7 +260,73 @@ def problem_60():
                 value = list(s)
     print(minvalue)
     print(value)
+ 
+def problem_60_2():
+    def prime(n):
+        if (n < 2):
+            return False
+        for x in range(2, int(n ** 0.5) + 1):
+            if n % x == 0: return False
+        return True
 
+    def pair(m, n):
+        a = ''.join(str(m))
+        b = ''.join(str(n))
+
+        if not prime(int(a + b)):
+            return False
+        return prime(int(b + a))
+
+    limit = 10000
+    bolprimelist = [True] * limit
+    primelist = []
+    for i in range(2, limit):
+        if bolprimelist[i]:
+            primelist.append(i)
+            for j in range(i*i, limit, i):
+                bolprimelist[j] = False
+
+    def getsums():
+        for i, a in enumerate(primelist):
+            for j, b in enumerate(primelist[i+1:]):
+                if not pair(a,b): continue
+                for k, c in enumerate(primelist[i+j+2:]):
+                    if not pair(a,c) or not pair(b,c): continue
+                    for l, d in enumerate(primelist[i+j+k+3:]):
+                        if not pair(a,d) or not pair(b,d) or not pair(c,d): continue
+                        for e in primelist[i+j+k+l+4:]:
+                            if pair(a,e) and pair(b,e) and pair(c,e) and pair(d,e):
+                                value = sum([a,b,c,d,e])
+                                return value
+    print(getsums())
+
+def problem_65():
+    def numbers(n):
+        s = [2, 1]
+        i = 0
+        while(len(s) < n+1):
+            i += 1
+            s.append(i*2)
+            s.append(1)
+            s.append(1)
+
+        while(len(s) > n+1):
+            s.pop()
+        return s
+
+    def add(num, m):
+        n, d=num[0], num[1]
+        return (n*m + d, n)
+
+    n = 99
+    s = numbers(n)
+    s.reverse()
+
+    value = (s[0],1)
+    for i in s[1:]:
+        value = add(value, i)
+
+    print(sum([int(x) for x in str(value[0])]))
 
 if __name__ == '__main__':
     unittest.main()
